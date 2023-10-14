@@ -1,0 +1,8 @@
+# Build results
+bin/
+
+# Visual Studio 2015 cache/options directory
+.vs/
+DOOM v1.vcxproj
+DOOM v1.vcxproj.filters
+DOOM v1.vcxproj.user
