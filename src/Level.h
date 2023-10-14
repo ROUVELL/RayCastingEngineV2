@@ -8,9 +8,13 @@ class Level
 public:
 	Level();
 
-	void LoadFromFile(const std::string& filename);
+
 	bool IsEmpty(int x, int y) const { return Get(x, y) == 0; }
 	uint Get(int x, int y) const;
+	int GetOffsetY() const { return offsetY; }
+	sf::Vector2u GetSize() const { return sf::Vector2u{width, height}; }
+
+	void LoadFromFile(const std::string& filename);
 	void Draw(sf::RenderTarget& target) const;
 
 private:
@@ -18,5 +22,6 @@ private:
 
 	uint width;
 	uint height;
+	int offsetY;
 };
 

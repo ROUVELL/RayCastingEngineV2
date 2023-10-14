@@ -21,8 +21,10 @@ private:
 	sf::Texture skyTex;
 	sf::Sprite sky1;
 	sf::Sprite sky2;
-	sf::Text fpsText;
-	sf::Font fpsFont;
+	sf::Text debugText;
+	sf::Font debugFont;
+
+	bool drawMiniMap;
 
 	void ProcessEvents();
 	void Update();

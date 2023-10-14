@@ -1,7 +1,9 @@
+#include <cmath>
+
 #include "Game.h"
 
-Game::Game() : dt(0.1f), skyOffset(0.f), player(&level),
-				rayCaster(&window, &player, &level)
+Game::Game() : dt(0.1f), skyOffset(0.f), drawMiniMap(false),
+				player(&level), rayCaster(&window, &player, &level)
 {
 	// sky texture settings
 	skyTex.loadFromFile(Settings::TEXTURES_DIR + "sky.png");
@@ -14,10 +16,10 @@ Game::Game() : dt(0.1f), skyOffset(0.f), player(&level),
 	sky2.setTexture(skyTex);
 	sky2.setScale(scale);
 
-	fpsFont.loadFromFile(Settings::FONTS_DIR + "Comfortaa-Regular.ttf");
-	fpsText.setCharacterSize(20);
-	fpsText.setFillColor(sf::Color::White);
-	fpsText.setFont(fpsFont);
+	debugFont.loadFromFile(Settings::FONTS_DIR + "Comfortaa-Regular.ttf");
+	debugText.setCharacterSize(20);
+	debugText.setFillColor(sf::Color::White);
+	debugText.setFont(debugFont);
 
 	level.LoadFromFile("0.txt");
 
@@ -32,7 +34,7 @@ Game::Game() : dt(0.1f), skyOffset(0.f), player(&level),
 	window.setMouseCursorGrabbed(true);
 	window.setMouseCursorVisible(false);
 	window.setVerticalSyncEnabled(true);
-	//window.setFramerateLimit(Settings::FPS);
+	//window.setFramerateLimit(60);
 }
 
 void Game::Run()
@@ -58,12 +60,14 @@ void Game::ProcessEvents()
 		case sf::Event::KeyPressed:
 			if (event.key.code == sf::Keyboard::Escape)
 				window.close();
+			else if (event.key.code == sf::Keyboard::M)
+				drawMiniMap = !drawMiniMap;
+			break;
+		
 
 		default:
 			break;
 		}
-
-		//player.ProcessEvents(event);
 	}
 }
 
@@ -77,10 +81,11 @@ void Game::Update()
 	sky2.setPosition(-skyOffset + Settings::SCREEN_WIDTH, 0.f);
 	
 	std::string FPS = std::to_string((int)(1.f / dt));
-	std::string X = "\nX: " + std::to_string(player.GetPosition().x);
+	std::string X = "\n\nX: " + std::to_string(player.GetPosition().x);
 	std::string Y = "  Y: " + std::to_string(player.GetPosition().y);
+	std::string angle = "\nAngle: " + std::to_string(player.GetAngle() * 180.f / Settings::PI);
 
-	fpsText.setString(FPS + X + Y);
+	debugText.setString(FPS + X + Y + angle);
 }
 
 void Game::Draw()
@@ -90,12 +95,16 @@ void Game::Draw()
 	window.draw(sky1);
 	window.draw(sky2);
 
-	rayCaster.Draw();
+	rayCaster.Draw3D();
 
-	level.Draw(window);
-	player.Draw(window);
+	if (drawMiniMap)
+	{
+		level.Draw(window);
+		rayCaster.Draw2D();
+		player.Draw(window);
+	}
 	
-	window.draw(fpsText);
+	window.draw(debugText);
 
 	window.display();
 }

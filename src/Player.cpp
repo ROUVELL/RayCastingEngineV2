@@ -5,35 +5,32 @@ Player::Player(Level* level)
 {
 }
 
-
-void Player::ProcessEvents(sf::Event& event)
-{
-}
-
 void Player::Update(float dt)
 {
 	Rotate(dt);
 	Movement(dt);
 }
 
-void Player::Draw(sf::RenderWindow& window) const
+void Player::Draw(sf::RenderTarget& target) const
 {
 	sf::Vector2f mappedPos = GetMappedPosition();
-	sf::Vector2f endpoint(mappedPos.x + std::cos(angle) * Settings::H_SCREEN_WIDTH,
-						  mappedPos.y + std::sin(angle) * Settings::H_SCREEN_WIDTH);
+	mappedPos.y += level->GetOffsetY();
+
+	sf::Vector2f endpoint(mappedPos.x + std::cos(angle) * Settings::TILE_SIZE * 10,
+						  mappedPos.y + std::sin(angle) * Settings::TILE_SIZE * 10);
 
 	sf::VertexArray line(sf::Lines, 2);
 	line[0] = sf::Vertex(mappedPos, sf::Color::Red);
 	line[1] = sf::Vertex(endpoint, sf::Color::Red);;
 	
-	window.draw(line);
+	target.draw(line);
 
-	sf::CircleShape player(10.f, 10);
+	sf::CircleShape player(5.f, 6);
 	player.setFillColor(sf::Color::Green);
-	player.setOrigin(10.f, 10.f);
+	player.setOrigin(5.f, 5.f);
 	player.setPosition(mappedPos);
 
-	window.draw(player);
+	target.draw(player);
 }
 
 void Player::Movement(float dt)
@@ -76,6 +73,9 @@ void Player::Rotate(float dt)
 	rel = (float)GetMouseOffset();
 	angle += rel * Settings::MOUSE_SENSETIVITY * dt;
 	angle = fmodf(angle, Settings::DOUBLE_PI);
+
+	if (angle < 0)
+		angle += Settings::DOUBLE_PI;
 }
 
 void Player::CheckCollision(float dt)

@@ -11,8 +11,7 @@ struct Ray
 	float projHeight;
 	int texNum;
 	float offset;
-
-	float rayAngle;
+	float angle;
 };
 
 class RayCasting
@@ -21,7 +20,8 @@ public:
 	RayCasting(sf::RenderWindow* window, Player* player, Level* level);
 
 	void Update();
-	void Draw();
+	void Draw2D();
+	void Draw3D();
 
 private:
 	sf::RenderWindow* window;

@@ -5,7 +5,7 @@
 #include "Level.h"
 
 
-Level::Level() : width(0), height(0)
+Level::Level() : width(0), height(0), offsetY(0)
 {
 }
 
@@ -37,6 +37,8 @@ void Level::LoadFromFile(const std::string& filename)
 		else
 			map.at(rowNum).push_back(texNum - '0');
 	}
+
+	offsetY = Settings::SCREEN_HEIGHT - height * Settings::TILE_SIZE;
 }
 
 uint Level::Get(int x, int y) const
@@ -49,7 +51,7 @@ uint Level::Get(int x, int y) const
 
 void Level::Draw(sf::RenderTarget& target) const
 {
-	sf::RectangleShape tile(sf::Vector2f(Settings::TILE_SIZE, Settings::TILE_SIZE));
+	sf::RectangleShape tile(sf::Vector2f((float)Settings::TILE_SIZE, (float)Settings::TILE_SIZE));
 	tile.setFillColor(sf::Color::Transparent);
 	tile.setOutlineColor(sf::Color(170, 170, 170, 200));
 	tile.setOutlineThickness(-1.f);
@@ -60,7 +62,7 @@ void Level::Draw(sf::RenderTarget& target) const
 		{
 			if (map[y][x] != 0)
 			{
-				tile.setPosition(x * Settings::TILE_SIZE, y * Settings::TILE_SIZE);
+				tile.setPosition(x * Settings::TILE_SIZE, offsetY + y * Settings::TILE_SIZE);
 
 				target.draw(tile);
 			}

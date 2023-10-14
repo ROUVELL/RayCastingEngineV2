@@ -15,9 +15,8 @@ public:
 	float GetAngle() const { return angle; }
 	float GetRel() const { return rel; }
 
-	void ProcessEvents(sf::Event& event);
 	void Update(float dt);
-	void Draw(sf::RenderWindow& window) const;
+	void Draw(sf::RenderTarget& target) const;
 
 private:
 	Level* level;

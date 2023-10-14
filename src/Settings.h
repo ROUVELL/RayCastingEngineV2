@@ -22,13 +22,11 @@ struct Settings
 	static constexpr uint H_SCREEN_HEIGHT = SCREEN_HEIGHT / 2;
 
 	// level
-	static constexpr int TILE_SIZE = 50;
-	static constexpr int LEVEL_WIDTH = 38;
-	static constexpr int LEVEL_HEIGHT = 22;
+	static int TILE_SIZE;
 
 	// player
 	static const sf::Vector2f PLAYER_POS;
-	static constexpr float PLAYER_SPEED = 5.f;
+	static float PLAYER_SPEED;
 
 	// numbers
 	static constexpr float PI = 3.141592653589793f;
@@ -41,27 +39,23 @@ struct Settings
 	static constexpr int H_NUM_RAYS = NUM_RAYS / 2;
 	static constexpr float DELTA_ANGLE = FOV / (float)NUM_RAYS;
 	static constexpr int SCALE = SCREEN_WIDTH / NUM_RAYS;
-	static constexpr int MAX_DEPTH = 20;
 	static const float SCREEN_DIST;
 
 	// mouse
-	static constexpr float MOUSE_SENSETIVITY = 0.2f;
-	static constexpr int MAX_REL = 50;
-
-	// fps
-	static constexpr int FPS = 60;
+	static const float MOUSE_SENSETIVITY;
+	static const int MAX_REL;
 
 	// colors
 	static const sf::Color BG;
 
 	// paths
-	static string ROOT_DIR;
-	static string RES_DIR;
-	static string FONTS_DIR;
-	static string TEXTURES_DIR;
-	static string LEVELS_DIR;
+	static const string ROOT_DIR;
+	static const string RES_DIR;
+	static const string FONTS_DIR;
+	static const string TEXTURES_DIR;
+	static const string LEVELS_DIR;
 
 	// other
-	static constexpr int TEXTURES_COUNT = 5;
-	static constexpr uint TEXTURE_SIZE = 1024;
+	static constexpr uint TEXTURES_COUNT = 5;
+	static const uint TEXTURE_SIZE;
 };

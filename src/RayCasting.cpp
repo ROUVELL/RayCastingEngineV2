@@ -4,14 +4,21 @@
 RayCasting::RayCasting(sf::RenderWindow* window, Player* player, Level* level)
 	: window(window), player(player), level(level)
 {
-	for (int i = 0; i < Settings::TEXTURES_COUNT;)
+	for (uint i = 0; i < Settings::TEXTURES_COUNT;)
+	{
 		textures[i].loadFromFile(Settings::TEXTURES_DIR + std::to_string(++i) + ".png");
+		/*sf::Vector2u size = textures[i].getSize();
+		sf::Vector2f scale((float)Settings::TEXTURE_SIZE / size.x,
+						   (float)Settings::TEXTURE_SIZE / size.y);*/
+		textures[i].setRepeated(true);
+	}
 }
 
 void RayCasting::Update()
 {
 	sf::Vector2f pos = this->player->GetPosition();
 	sf::Vector2i ipos = sf::Vector2i(pos);
+	sf::Vector2u levelSize = level->GetSize();
 	uint vTexNum, hTexNum;
 
 	float rayAngle = this->player->GetAngle() - Settings::H_FOV + 0.0001f;
@@ -32,7 +39,7 @@ void RayCasting::Update()
 		}
 		else
 		{
-			yHor = ipos.y - 1e-5;
+			yHor = ipos.y - 1e-5f;
 			horDy = -1.f;
 		}
 
@@ -42,7 +49,7 @@ void RayCasting::Update()
 		float horDeltaDepth = horDy / sin_a;
 		float horDx = horDeltaDepth * cos_a;
 
-		for (int i = 0; i < Settings::LEVEL_HEIGHT; i++)
+		for (uint i = 0; i < levelSize.y; i++)
 		{
 			
 			if (!this->level->IsEmpty((int)xHor, (int)yHor))
@@ -66,10 +73,10 @@ void RayCasting::Update()
 		else
 		{
 			/*
-			Раніше тут було 1е-6, але коли позиція по х була більше 32
-			промені заходили всередину стін, тому я опустив до 1е-5
+			Раніше тут було 1е-6f, але коли позиція по х була більше 32
+			промені заходили всередину стін, тому я опустив до 1е-5f
 			*/
-			xVert = ipos.x - 1e-5;
+			xVert = ipos.x - 1e-5f;
 			vertDx = -1.f;
 		}
 
@@ -79,7 +86,7 @@ void RayCasting::Update()
 		float vertDeltaDepth = vertDx / cos_a;
 		float vertDy = vertDeltaDepth * sin_a;
 
-		for (int i = 0; i < Settings::LEVEL_WIDTH; i++)
+		for (uint i = 0; i < levelSize.x; i++)
 		{
 			if (!this->level->IsEmpty((int)xVert, (int)yVert))
 			{
@@ -111,7 +118,7 @@ void RayCasting::Update()
 
 		if (texNum >= 0)
 		{
-			//depth *= std::cos(this->player->GetAngle() - rayAngle);
+			depth *= std::cos(this->player->GetAngle() - rayAngle);
 			float projHeight = Settings::SCREEN_DIST / (depth + 0.0001f);
 
 			raysData[ray].rayNum = ray;
@@ -119,7 +126,7 @@ void RayCasting::Update()
 			raysData[ray].projHeight = projHeight;
 			raysData[ray].texNum = texNum;
 			raysData[ray].offset = offset;
-			raysData[ray].rayAngle = rayAngle;
+			raysData[ray].angle = rayAngle;
 		}
 		else
 			raysData[ray].texNum = -1;
@@ -128,26 +135,39 @@ void RayCasting::Update()
 	}
 }
 
-void RayCasting::Draw()
+void RayCasting::Draw2D()
 {
 	sf::VertexArray lines(sf::Lines, 2);
-	sf::Sprite wall;
 
 	for (auto& ray : raysData)
 	{
 		if (ray.texNum == -1)
 			continue;
 
+		sf::Vector2f playerPos = player->GetMappedPosition();
+		playerPos.y += level->GetOffsetY();
 
-		sf::Vector2f p_pos = player->GetMappedPosition();
+		float depth = ray.depth /= std::cos(this->player->GetAngle() - ray.angle);
 		sf::Vector2f end(
-			p_pos.x + ray.depth * Settings::TILE_SIZE * std::cos(ray.rayAngle),
-			p_pos.y + ray.depth * Settings::TILE_SIZE * std::sin(ray.rayAngle)
+			playerPos.x + depth * Settings::TILE_SIZE * std::cos(ray.angle),
+			playerPos.y + depth * Settings::TILE_SIZE * std::sin(ray.angle)
 		);
 
-		lines.append(sf::Vertex(p_pos, sf::Color(255, 255, 255, 60)));
+		lines.append(sf::Vertex(playerPos, sf::Color(255, 255, 255, 60)));
 		lines.append(sf::Vertex(end, sf::Color(255, 255, 255, 60)));
+	}
 
+	window->draw(lines);
+}
+
+void RayCasting::Draw3D()
+{
+	sf::Sprite wall;
+
+	for (auto& ray : raysData)
+	{
+		if (ray.texNum == -1)
+			continue;
 
 		wall.setTexture(textures[ray.texNum]);
 
@@ -160,6 +180,4 @@ void RayCasting::Draw()
 
 		window->draw(wall);
 	}
-
-	window->draw(lines);
 }
