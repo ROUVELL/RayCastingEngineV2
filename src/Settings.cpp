@@ -28,4 +28,4 @@ const string Settings::TEXTURES_DIR = RES_DIR + "textures\\";
 const string Settings::LEVELS_DIR = RES_DIR + "levels\\";
 
 // other
-const uint Settings::TEXTURE_SIZE = 1024;
+const uint Settings::TEXTURE_SIZE = 2048;

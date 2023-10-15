@@ -1,7 +1,7 @@
 #include "Player.h"
 
 Player::Player(Level* level)
-	: level(level), position(Settings::PLAYER_POS), angle(0.f)
+	: level(level), position(Settings::PLAYER_POS), angle(0.f), rel(0.f)
 {
 }
 

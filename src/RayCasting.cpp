@@ -4,9 +4,9 @@
 RayCasting::RayCasting(sf::RenderWindow* window, Player* player, Level* level)
 	: window(window), player(player), level(level)
 {
-	for (uint i = 0; i < Settings::TEXTURES_COUNT;)
+	for (uint i = 0; i < Settings::TEXTURES_COUNT; i++)
 	{
-		textures[i].loadFromFile(Settings::TEXTURES_DIR + std::to_string(++i) + ".png");
+		textures[i].loadFromFile(Settings::TEXTURES_DIR + std::to_string(i) + ".png");
 		/*sf::Vector2u size = textures[i].getSize();
 		sf::Vector2f scale((float)Settings::TEXTURE_SIZE / size.x,
 						   (float)Settings::TEXTURE_SIZE / size.y);*/

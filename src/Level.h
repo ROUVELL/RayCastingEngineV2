@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include "Settings.h"
 
 class Level
@@ -24,4 +23,3 @@ private:
 	uint height;
 	int offsetY;
 };
-

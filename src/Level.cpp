@@ -13,8 +13,6 @@ void Level::LoadFromFile(const std::string& filename)
 {
 	std::ifstream levelFile(Settings::LEVELS_DIR + filename);
 
-	std::string line;
-
 	levelFile >> width >> height;
 
 	// переходимо на наступний радок
