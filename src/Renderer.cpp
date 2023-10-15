@@ -29,6 +29,43 @@ void Renderer::Update(float dt)
 	sky1.setPosition(-skyOffset, 0.f);
 	sky2.setPosition(-skyOffset + Settings::SCREEN_WIDTH, 0.f);
 
+	GetObjectsToRender();
+	UpdateDebugText(dt);
+}
+
+void Renderer::DrawAll() const
+{
+	window->draw(sky1);
+	window->draw(sky2);
+
+	//rayCaster->Draw3D();
+	for (auto& renderData : toRender)
+		window->draw(renderData.sprite);
+	
+	if (drawMiniMap)
+	{
+		level->Draw(*window);
+		rayCaster->Draw(*window);
+		player->Draw(*window);
+	}
+
+	window->draw(debugText);
+}
+
+void Renderer::GetObjectsToRender()
+{
+	toRender.clear();
+
+	auto& walls = rayCaster->GetWalls();
+
+	toRender.insert(toRender.end(), walls.begin(), walls.end());
+
+	//std::reverse(toRender.begin(), toRender.end());
+
+}
+
+void Renderer::UpdateDebugText(float dt)
+{
 	std::string FPS = std::to_string((int)(1.f / dt));
 	std::string X = "\n\nX: " + std::to_string(player->GetPosition().x);
 	std::string Y = "  Y: " + std::to_string(player->GetPosition().y);
@@ -37,19 +74,3 @@ void Renderer::Update(float dt)
 	debugText.setString(FPS + X + Y + angle);
 }
 
-void Renderer::DrawAll() const
-{
-	window->draw(sky1);
-	window->draw(sky2);
-
-	rayCaster->Draw3D();
-
-	if (drawMiniMap)
-	{
-		level->Draw(*window);
-		rayCaster->Draw2D();
-		player->Draw(*window);
-	}
-
-	window->draw(debugText);
-}

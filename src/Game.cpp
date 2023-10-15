@@ -3,13 +3,13 @@
 #include "Game.h"
 
 Game::Game() : dt(0.1f), player(&level),
-			rayCaster(&window, &player, &level),
+			rayCaster(&player, &level),
 			renderer(&window, &player, &level, &rayCaster)
 {
 	level.LoadFromFile("0.txt");
 
 	if (Settings::FULLSCREEN)
-		window.create(sf::VideoMode().getFullscreenModes().front(), "Ray Casting Engine", sf::Style::Fullscreen);
+		window.create(sf::VideoMode(Settings::MONITOR_WIDTH, Settings::MONITOR_HEIGHT), "Ray Casting Engine", sf::Style::Fullscreen);
 	else
 		window.create(sf::VideoMode(Settings::SCREEN_WIDTH, Settings::SCREEN_HEIGHT), "Ray Casting Engine", sf::Style::None);
 
@@ -58,7 +58,7 @@ void Game::ProcessEvents()
 
 void Game::Update()
 {
-	renderer.ClearRenderList();
+	//renderer.ClearRenderList();
 
 	player.Update(dt);
 	rayCaster.Update();

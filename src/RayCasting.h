@@ -14,21 +14,28 @@ struct Ray
 	float angle;
 };
 
+struct RenderData
+{
+	float depth;
+	sf::Sprite sprite;
+};
+
 class RayCasting
 {
 public:
-	RayCasting(sf::RenderWindow* window, Player* player, Level* level);
+	RayCasting(Player* player, Level* level);
+
+	std::array<RenderData, Settings::NUM_RAYS>& GetWalls();
 
 	void Update();
-	void Draw2D() const;
-	void Draw3D() const;
+	void Draw(sf::RenderTarget& target) const;
 
 private:
-	sf::RenderWindow* window;
 	Player* player;
 	Level* level;
 
 	std::array<Ray, Settings::NUM_RAYS> raysData;
+	std::array<RenderData, Settings::NUM_RAYS> walls;
 	std::array<sf::Texture, Settings::TEXTURES_COUNT> textures;
 };
 

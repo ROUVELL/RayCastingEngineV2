@@ -1,8 +1,8 @@
 #include "RayCasting.h"
 
 
-RayCasting::RayCasting(sf::RenderWindow* window, Player* player, Level* level)
-	: window(window), player(player), level(level)
+RayCasting::RayCasting(Player* player, Level* level)
+	: player(player), level(level)
 {
 	for (uint i = 0; i < Settings::TEXTURES_COUNT; i++)
 	{
@@ -12,6 +12,31 @@ RayCasting::RayCasting(sf::RenderWindow* window, Player* player, Level* level)
 						   (float)Settings::TEXTURE_SIZE / size.y);*/
 		textures[i].setRepeated(true);
 	}
+}
+
+std::array<RenderData, Settings::NUM_RAYS>& RayCasting::GetWalls()
+{
+	sf::Sprite wall;
+
+	for (auto& ray : raysData)
+	{
+		if (ray.texNum == -1)
+			continue;
+
+		wall.setTexture(textures[ray.texNum]);
+
+		int left = static_cast<int>(ray.offset * (Settings::TEXTURE_SIZE - Settings::SCALE));
+		int top = static_cast<int>(Settings::H_SCREEN_HEIGHT - ray.projHeight / 2.f);
+
+		wall.setPosition(ray.rayNum * (float)Settings::SCALE, (float)top);
+		wall.setScale(1.f, ray.projHeight / (float)Settings::TEXTURE_SIZE);
+		wall.setTextureRect(sf::IntRect(left, 0, Settings::SCALE, Settings::TEXTURE_SIZE));
+	
+		walls[ray.rayNum].depth = ray.depth;
+		walls[ray.rayNum].sprite = wall;
+	}
+
+	return walls;
 }
 
 void RayCasting::Update()
@@ -135,7 +160,7 @@ void RayCasting::Update()
 	}
 }
 
-void RayCasting::Draw2D() const
+void RayCasting::Draw(sf::RenderTarget& target) const
 {
 	sf::VertexArray lines(sf::Lines, 2);
 
@@ -158,27 +183,6 @@ void RayCasting::Draw2D() const
 		lines.append(sf::Vertex(end, sf::Color(255, 255, 255, 60)));
 	}
 
-	window->draw(lines);
+	target.draw(lines);
 }
 
-void RayCasting::Draw3D() const
-{
-	sf::Sprite wall;
-
-	for (auto& ray : raysData)
-	{
-		if (ray.texNum == -1)
-			continue;
-
-		wall.setTexture(textures[ray.texNum]);
-
-		int left = static_cast<int>(ray.offset * (Settings::TEXTURE_SIZE - Settings::SCALE));
-		int top = static_cast<int>(Settings::H_SCREEN_HEIGHT - ray.projHeight / 2.f);
-
-		wall.setPosition(ray.rayNum * (float)Settings::SCALE, (float)top);
-		wall.setScale(1.f, ray.projHeight / (float)Settings::TEXTURE_SIZE);
-		wall.setTextureRect(sf::IntRect(left, 0, Settings::SCALE, Settings::TEXTURE_SIZE));
-
-		window->draw(wall);
-	}
-}

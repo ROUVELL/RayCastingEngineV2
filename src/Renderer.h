@@ -1,11 +1,6 @@
 #pragma once
 
-#include "SFML/Graphics.hpp"
-#include "Settings.h"
-
-class Player;
-class Level;
-class RayCasting;
+#include "RayCasting.h"
 
 class Renderer
 {
@@ -16,7 +11,7 @@ public:
 			 Player* player, Level* level,
 			 RayCasting* rayCaster);
 
-	void ClearRenderList() { toRender.clear(); }
+	//void ClearRenderList() { toRender.clear(); }
 
 	void Update(float dt);
 	void DrawAll() const;
@@ -27,7 +22,7 @@ private:
 	Level* level;
 	RayCasting* rayCaster;
 
-	std::vector<int> toRender;
+	std::vector<RenderData> toRender;
 
 	float skyOffset;
 	sf::Texture skyTex;
@@ -35,5 +30,8 @@ private:
 	sf::Sprite sky2;
 	sf::Text debugText;
 	sf::Font debugFont;
+
+	inline void GetObjectsToRender();
+	inline void UpdateDebugText(float dt);
 };
 
