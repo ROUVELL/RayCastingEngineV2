@@ -1,6 +1,6 @@
 #pragma once
 
-#include "RayCasting.h"
+#include "Renderer.h"
 
 class Game
 {
@@ -16,15 +16,7 @@ private:
 	Level level;
 	Player player;
 	RayCasting rayCaster;
-
-	float skyOffset;
-	sf::Texture skyTex;
-	sf::Sprite sky1;
-	sf::Sprite sky2;
-	sf::Text debugText;
-	sf::Font debugFont;
-
-	bool drawMiniMap;
+	Renderer renderer;
 
 	void ProcessEvents();
 	void Update();

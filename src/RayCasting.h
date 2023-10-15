@@ -20,8 +20,8 @@ public:
 	RayCasting(sf::RenderWindow* window, Player* player, Level* level);
 
 	void Update();
-	void Draw2D();
-	void Draw3D();
+	void Draw2D() const;
+	void Draw3D() const;
 
 private:
 	sf::RenderWindow* window;

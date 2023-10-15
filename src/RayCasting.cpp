@@ -135,19 +135,20 @@ void RayCasting::Update()
 	}
 }
 
-void RayCasting::Draw2D()
+void RayCasting::Draw2D() const
 {
 	sf::VertexArray lines(sf::Lines, 2);
+
+	float playerAngle = player->GetAngle();
+	sf::Vector2f playerPos = player->GetMappedPosition();
+	playerPos.y += level->GetOffsetY();
 
 	for (auto& ray : raysData)
 	{
 		if (ray.texNum == -1)
 			continue;
 
-		sf::Vector2f playerPos = player->GetMappedPosition();
-		playerPos.y += level->GetOffsetY();
-
-		float depth = ray.depth /= std::cos(this->player->GetAngle() - ray.angle);
+		float depth = ray.depth / std::cos(playerAngle - ray.angle);
 		sf::Vector2f end(
 			playerPos.x + depth * Settings::TILE_SIZE * std::cos(ray.angle),
 			playerPos.y + depth * Settings::TILE_SIZE * std::sin(ray.angle)
@@ -160,7 +161,7 @@ void RayCasting::Draw2D()
 	window->draw(lines);
 }
 
-void RayCasting::Draw3D()
+void RayCasting::Draw3D() const
 {
 	sf::Sprite wall;
 
