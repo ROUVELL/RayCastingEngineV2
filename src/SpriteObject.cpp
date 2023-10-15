@@ -3,26 +3,9 @@
 
 #include "SpriteObject.h"
 
-SpriteObject::SpriteObject(Player* player, Level* level, sf::Vector2f position)
-	: player(player), level(level), position(position), texture(nullptr),
-	textureWidth(0.f), textureHalfWidth(0.f), textureHeight(0.f),
-	textureRation(1.f), dist(1.f), normDist(1.f), screenX(0.f)
+SpriteObject::SpriteObject(Player* player, Level* level)
+	: player(player), level(level)
 {
-}
-
-SpriteObject::SpriteObject(Player* player, Level* level, sf::Vector2f position, std::string filename)
-	: SpriteObject(player, level, position)
-{
-	this->texture = new sf::Texture{};
-	this->texture->loadFromFile(filename);
-	SetTexture(*this->texture);
-	this->sprite.setOrigin(this->textureHalfWidth, this->textureHeight / 2.f);
-}
-
-SpriteObject::~SpriteObject()
-{
-	delete this->texture;
-	this->texture = nullptr;
 }
 
 bool SpriteObject::CheckObject()
@@ -67,28 +50,35 @@ void SpriteObject::Draw(sf::RenderTarget& target) const
 
 void SpriteObject::UpdateProjection()
 {
-	float proj = Settings::SCREEN_DIST / this->normDist;
+	float proj = Settings::SCREEN_DIST / this->normDist * this->scale;
 	float projWidth = proj * this->textureRation;
 	
 	float scaleX = projWidth / this->textureWidth;
 	float scaleY = proj / this->textureHeight;
 
+	float heightShift = proj * this->shift;
+
 	sprite.setScale(scaleX, scaleY);
 	sprite.setPosition(
 		this->screenX,
-		(float)Settings::H_SCREEN_HEIGHT
+		(float)Settings::H_SCREEN_HEIGHT + heightShift
 	);
 }
 
-void SpriteObject::SetTexture(sf::Texture& newTexture)
+void SpriteObject::SetTexture(sf::Texture* newTexture)
 {
-	*this->texture = newTexture;
+	if (newTexture != nullptr)
+		this->texture = newTexture;
+
 	this->sprite.setTexture(*this->texture);
 
 	sf::Vector2f size = (sf::Vector2f)this->texture->getSize();
 	this->textureWidth = size.x;
-	this->textureHalfWidth = this->textureWidth / 2.f;
+	this->textureHalfWidth = size.x / 2.f;
 	this->textureHeight = size.y;
-	this->textureRation = this->textureWidth / (float)this->texture->getSize().y;
+	this->textureRation = size.x / size.y;
+	
+	this->sprite.setOrigin(this->textureHalfWidth, this->textureHeight / 2.f);
+
 }
 

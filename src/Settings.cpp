@@ -8,7 +8,7 @@ int Settings::TILE_SIZE = 20;
 // player
 const sf::Vector2f Settings::PLAYER_POS{12.5f, 9.5f};
 
-float Settings::PLAYER_SPEED = 5.f;
+float Settings::PLAYER_SPEED = 4.f;
 
 // ray casting
 const float Settings::SCREEN_DIST = (float)H_SCREEN_WIDTH / std::tan(H_FOV);
@@ -28,6 +28,7 @@ const string Settings::TEXTURES_DIR = RES_DIR + "textures\\";
 const string Settings::LEVELS_DIR = RES_DIR + "levels\\";
 const string Settings::SPRITES_DIR = RES_DIR + "sprites\\";
 const string Settings::STATIC_SPRITES_DIR = SPRITES_DIR + "static\\";
+const string Settings::LOOPED_SPRITES_DIR = SPRITES_DIR + "looped\\";
 
 // other
 const uint Settings::TEXTURE_SIZE = 1024;

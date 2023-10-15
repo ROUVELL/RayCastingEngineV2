@@ -64,16 +64,16 @@ void Renderer::GetObjectsToRender()
 
 	toRender.insert(toRender.end(), walls.begin(), walls.end());
 	
-
 	auto& sprites = spriteHandler->GetRenderData();
 	
+	// якщо немаЇ спрайт≥в то сортувати не потр≥бно. —кор≥ш за все ц€
+	// ц€ оптим≥зац≥€ немаЇ сенсу тому що спрайти будуть повсюду
 	if (sprites.size() > 0)
 	{
 		toRender.insert(toRender.end(), sprites.begin(), sprites.end());
 
 		std::sort(toRender.begin(), toRender.end(), DepthComparison);
 	}
-
 }
 
 void Renderer::UpdateDebugText(float dt)

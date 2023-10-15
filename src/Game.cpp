@@ -18,7 +18,7 @@ Game::Game() : dt(0.1f), player(&level),
 
 	window.setMouseCursorGrabbed(true);
 	window.setMouseCursorVisible(false);
-	//window.setVerticalSyncEnabled(true);
+	window.setVerticalSyncEnabled(true);
 	//window.setFramerateLimit(60);
 }
 
