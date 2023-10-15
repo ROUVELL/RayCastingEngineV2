@@ -26,6 +26,8 @@ const string Settings::RES_DIR = ROOT_DIR + "res\\";
 const string Settings::FONTS_DIR = RES_DIR + "fonts\\";
 const string Settings::TEXTURES_DIR = RES_DIR + "textures\\";
 const string Settings::LEVELS_DIR = RES_DIR + "levels\\";
+const string Settings::SPRITES_DIR = RES_DIR + "sprites\\";
+const string Settings::STATIC_SPRITES_DIR = SPRITES_DIR + "static\\";
 
 // other
 const uint Settings::TEXTURE_SIZE = 1024;

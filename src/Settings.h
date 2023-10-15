@@ -54,6 +54,8 @@ struct Settings
 	static const string FONTS_DIR;
 	static const string TEXTURES_DIR;
 	static const string LEVELS_DIR;
+	static const string SPRITES_DIR;
+	static const string STATIC_SPRITES_DIR;
 
 	// other
 	static constexpr uint TEXTURES_COUNT = 5;

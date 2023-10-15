@@ -10,7 +10,7 @@ public:
 	Player(Level* level);
 
 	sf::Vector2f GetPosition() const { return position; }
-	sf::Vector2i GetLevelPosition() const { return {(int)position.x, (int)position.y}; };
+	sf::Vector2i GetLevelPosition() const { return (sf::Vector2i)position; };
 	sf::Vector2f GetMappedPosition() const { return {position.x * Settings::TILE_SIZE, position.y * Settings::TILE_SIZE}; }
 	float GetAngle() const { return angle; }
 	float GetRel() const { return rel; }

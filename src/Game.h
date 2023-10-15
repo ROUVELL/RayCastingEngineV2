@@ -16,6 +16,7 @@ private:
 	Level level;
 	Player player;
 	RayCasting rayCaster;
+	SpriteHandler spriteHandler;
 	Renderer renderer;
 
 	void ProcessEvents();

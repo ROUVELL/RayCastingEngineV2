@@ -1,6 +1,9 @@
 #pragma once
 
+#include "SpriteHandler.h"
 #include "RayCasting.h"
+
+static bool DepthComparison(const RenderData& left, const RenderData& right);
 
 class Renderer
 {
@@ -9,6 +12,7 @@ public:
 
 	Renderer(sf::RenderWindow* window,
 			 Player* player, Level* level,
+			 SpriteHandler* spriteHandler,
 			 RayCasting* rayCaster);
 
 	//void ClearRenderList() { toRender.clear(); }
@@ -20,6 +24,7 @@ private:
 	sf::RenderWindow* window;
 	Player* player;
 	Level* level;
+	SpriteHandler* spriteHandler;
 	RayCasting* rayCaster;
 
 	std::vector<RenderData> toRender;

@@ -3,8 +3,8 @@
 #include "Game.h"
 
 Game::Game() : dt(0.1f), player(&level),
-			rayCaster(&player, &level),
-			renderer(&window, &player, &level, &rayCaster)
+			rayCaster(&player, &level), spriteHandler(&player, &level),
+			renderer(&window, &player, &level, &spriteHandler, &rayCaster)
 {
 	level.LoadFromFile("0.txt");
 
@@ -18,7 +18,7 @@ Game::Game() : dt(0.1f), player(&level),
 
 	window.setMouseCursorGrabbed(true);
 	window.setMouseCursorVisible(false);
-	window.setVerticalSyncEnabled(true);
+	//window.setVerticalSyncEnabled(true);
 	//window.setFramerateLimit(60);
 }
 
@@ -62,6 +62,7 @@ void Game::Update()
 
 	player.Update(dt);
 	rayCaster.Update();
+	spriteHandler.Update();
 
 	renderer.Update(dt);
 }

@@ -1,9 +1,12 @@
+#include <algorithm>
 #include "Renderer.h"
 
 Renderer::Renderer(sf::RenderWindow* window,
 				   Player* player, Level* level,
+				   SpriteHandler* spriteHandler,
 				   RayCasting* rayCaster)
-	: window(window), player(player), level(level), rayCaster(rayCaster),
+	: window(window), player(player), level(level),
+	rayCaster(rayCaster), spriteHandler(spriteHandler),
 	skyOffset(0.f), drawMiniMap(false)
 {
 	// sky texture settings
@@ -46,6 +49,7 @@ void Renderer::DrawAll() const
 	{
 		level->Draw(*window);
 		rayCaster->Draw(*window);
+		spriteHandler->Draw(*window);
 		player->Draw(*window);
 	}
 
@@ -59,8 +63,16 @@ void Renderer::GetObjectsToRender()
 	auto& walls = rayCaster->GetWalls();
 
 	toRender.insert(toRender.end(), walls.begin(), walls.end());
+	
 
-	//std::reverse(toRender.begin(), toRender.end());
+	auto& sprites = spriteHandler->GetRenderData();
+	
+	if (sprites.size() > 0)
+	{
+		toRender.insert(toRender.end(), sprites.begin(), sprites.end());
+
+		std::sort(toRender.begin(), toRender.end(), DepthComparison);
+	}
 
 }
 
@@ -74,3 +86,7 @@ void Renderer::UpdateDebugText(float dt)
 	debugText.setString(FPS + X + Y + angle);
 }
 
+bool DepthComparison(const RenderData& left, const RenderData& right)
+{
+	return left.depth > right.depth;
+}

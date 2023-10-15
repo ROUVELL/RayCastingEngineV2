@@ -3,6 +3,7 @@
 #include <array>
 
 #include "Player.h"
+#include "RenderData.h"
 
 struct Ray
 {
@@ -12,12 +13,6 @@ struct Ray
 	int texNum;
 	float offset;
 	float angle;
-};
-
-struct RenderData
-{
-	float depth;
-	sf::Sprite sprite;
 };
 
 class RayCasting
